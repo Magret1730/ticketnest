@@ -83,7 +83,7 @@ export default function Register() {
                 <input
                   id="password"
                   type="password"
-                  placeholder="Create a password"
+                  placeholder="Password"
                   className="h-10 w-full rounded-xl border border-gray-300 px-4 pr-12 text-lg text-black outline-none transition placeholder:text-gray-400 focus:border-black"
                 />
                 <button
@@ -110,7 +110,7 @@ export default function Register() {
           <p className="mt-4 text-center text-md text-gray-500">
             Already have an account?{" "}
             <Link to="/login" className="font-semibold text-black">
-              Sign in
+              Log in
             </Link>
           </p>
         </div>
