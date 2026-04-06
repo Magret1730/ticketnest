@@ -9,4 +9,5 @@ export default function AdminRoute() {
   }
 
   return isAdmin ? <Outlet /> : <Navigate to="/" replace />;
+  // return <Outlet />;
 }
