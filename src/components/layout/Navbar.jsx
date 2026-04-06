@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function Navbar() {
   const { isAuthenticated, isAdmin } = useAuth();
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const [adminMenuOpen, setAdminMenuOpen] = useState(false);
 
   const navLinkClass = ({ isActive }) =>
     `text-base font-medium transition-colors ${
@@ -31,15 +32,11 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8 lg:gap-10">
-          {/* <NavLink to="/" className={navLinkClass}>
-            Home
-          </NavLink> */}
-
           <NavLink to="/events" className={navLinkClass}>
             Events
           </NavLink>
 
-          {/* {isAuthenticated && ( */}
+          {isAuthenticated && (
             <>
               <NavLink to="/my-bookings" className={navLinkClass}>
                 My Bookings
@@ -49,13 +46,61 @@ export default function Navbar() {
                 My Payments
               </NavLink>
             </>
-          {/* )} */}
+          )}
 
-          {/* {isAuthenticated && isAdmin && ( */}
-            <NavLink to="/admin/dashboard" className={navLinkClass}>
-              Admin
-            </NavLink>
-          {/* )} */}
+          {isAuthenticated && isAdmin && (
+             <div className="relative">
+                <button
+                  onClick={() => setAdminMenuOpen((prev) => !prev)}
+                  className={`text-base font-medium transition-colors ${
+                    adminMenuOpen ? "text-black" : "text-gray-600 hover:text-black"
+                  }`}
+                >
+                  Admin
+                </button>
+
+                {/* Admin Menu */}
+                {adminMenuOpen && (
+                    <div className="absolute top-full mt-2 w-48 bg-white border border-gray-300 rounded-xl shadow-lg py-2 z-50">
+                      <NavLink
+                        to="/admin/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        Dashboard
+                      </NavLink>
+                      <NavLink
+                        to="/admin/events"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        Manage Events
+                      </NavLink>
+                      <NavLink
+                        to="/admin/bookings"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        View Bookings
+                      </NavLink>
+                      <NavLink
+                        to="/admin/payments"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        View Payments
+                      </NavLink>
+                      <NavLink
+                        to="/admin/users"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setAdminMenuOpen(false)}
+                      >
+                        View Users
+                      </NavLink>
+                    </div>
+                )}
+              </div>
+          )}
         </div>
 
         {/* Right Side */}
@@ -117,8 +162,8 @@ export default function Navbar() {
               Events
             </NavLink>
 
-            {/* {isAuthenticated && ( */}
-              {/* <> */}
+            {isAuthenticated && (
+              <>
                 <NavLink
                   to="/my-bookings"
                   className={navLinkClass}
@@ -134,10 +179,10 @@ export default function Navbar() {
                 >
                   My Payments
                 </NavLink>
-              {/* </> */}
-            {/* )} */}
+              </>
+            )}
 
-            {/* {isAuthenticated && isAdmin && ( */}
+            {isAuthenticated && isAdmin && (
               <NavLink
                 to="/admin/dashboard"
                 className={navLinkClass}
@@ -145,11 +190,11 @@ export default function Navbar() {
               >
                 Admin
               </NavLink>
-            {/* )} */}
+            )}
           </div>
 
           <div className="pt-2 border-t border-gray-200">
-            {/* {!isAuthenticated ? (
+            {!isAuthenticated ? (
               <div className="flex flex-col gap-3">
                 <Link
                   to="/login"
@@ -167,7 +212,7 @@ export default function Navbar() {
                   Create Account
                 </Link>
               </div>
-            ) : ( */}
+            ) : (
               <Link
                 to="/me"
                 onClick={closeMobileMenu}
@@ -176,7 +221,7 @@ export default function Navbar() {
                 <User className="w-4 h-4" />
                 <span>Account</span>
               </Link>
-            {/* )} */}
+            )}
           </div>
         </div>
       )}

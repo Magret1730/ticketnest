@@ -11,7 +11,7 @@ export default function FeaturedEventsSection() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="mb-10 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 className="text-4xl font-bold tracking-tight text-black md:text-5xl">
+            <h2 className="text-xl font-bold tracking-tight text-black md:text-5xl">
               Featured Events
             </h2>
             <p className="mt-3 text-lg text-gray-600 md:text-xl">
