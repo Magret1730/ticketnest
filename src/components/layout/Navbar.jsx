@@ -31,9 +31,9 @@ export default function Navbar() {
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8 lg:gap-10">
-          <NavLink to="/" className={navLinkClass}>
+          {/* <NavLink to="/" className={navLinkClass}>
             Home
-          </NavLink>
+          </NavLink> */}
 
           <NavLink to="/events" className={navLinkClass}>
             Events

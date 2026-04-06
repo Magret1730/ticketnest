@@ -1,0 +1,82 @@
+[
+    {
+      "id": 1,
+      "title": "Summer Music Festival",
+      "date": "Wed, Jul 15",
+      "time": "6:00 PM",
+      "location": "Central Park Amphitheater",
+      "price": 75,
+      "ticketsLeft": 234,
+      "image": ""
+    },
+    {
+      "id": 2,
+      "title": "Tech Conference 2026",
+      "date": "Sat, Aug 22",
+      "time": "9:00 AM",
+      "location": "Convention Center Hall A",
+      "price": 299,
+      "ticketsLeft": 567,
+      "image": ""
+    },
+    {
+      "id": 3,
+      "title": "Comedy Night Live",
+      "date": "Sun, May 10",
+      "time": "8:00 PM",
+      "location": "Downtown Comedy Club",
+      "price": 35,
+      "ticketsLeft": 42,
+      "image": ""
+    },
+    {
+      "id": 4,
+      "title": "Food & Wine Expo",
+      "date": "Fri, Sep 12",
+      "time": "1:00 PM",
+      "location": "Riverside Expo Center",
+      "price": 60,
+      "ticketsLeft": 120,
+      "image": ""
+    },
+    {
+      "id": 5,
+      "title": "Startup Pitch Summit",
+      "date": "Thu, Oct 08",
+      "time": "10:30 AM",
+      "location": "Innovation Hub",
+      "price": 120,
+      "ticketsLeft": 88,
+      "image": ""
+    },
+    {
+      "id": 6,
+      "title": "Jazz Under the Stars",
+      "date": "Sat, Jun 20",
+      "time": "7:30 PM",
+      "location": "Harborfront Stage",
+      "price": 50,
+      "ticketsLeft": 156,
+      "image": ""
+    },
+    {
+      "id": 7,
+      "title": "Basketball Finals",
+      "date": "Mon, Nov 03",
+      "time": "7:00 PM",
+      "location": "Metro Sports Arena",
+      "price": 180,
+      "ticketsLeft": 95,
+      "image": ""
+    },
+    {
+      "id": 8,
+      "title": "Art & Culture Showcase",
+      "date": "Sun, Dec 14",
+      "time": "2:00 PM",
+      "location": "City Art Gallery",
+      "price": 25,
+      "ticketsLeft": 210,
+      "image": ""
+    }
+  ]
