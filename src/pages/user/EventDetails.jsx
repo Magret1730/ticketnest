@@ -188,10 +188,12 @@ export default function EventDetails() {
                   className="h-12 w-full rounded-xl bg-black text-lg font-medium text-white transition hover:bg-gray-800"
                   onClick={() =>
                     isAuthenticated
-                      ? navigate(`/payment/${bookingId}?quantity=${quantity}`)
+                      ? navigate(`/booking/${event.id}?quantity=${quantity}`)
                       : navigate("/login")
                   }
+                  // onClick={() => navigate(`/booking/${event.id}?quantity=${quantity}`)} // Did this because auth isn't ready
                 >
+
                   Book Tickets
                 </button>
               </div>
