@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const navLinkClass = ({ isActive }) =>
     `text-base font-medium transition-colors ${
-      isActive ? "text-black" : "text-gray-600 hover:text-black"
+      isActive ? "text-black border-b border-b-2 border-grey-300" : "text-gray-600 hover:text-black"
     }`;
 
   const closeMobileMenu = () => {
@@ -39,7 +39,7 @@ export default function Navbar() {
           {isAuthenticated && (
             <>
               <NavLink to="/my-bookings" className={navLinkClass}>
-                My Bookings
+                Bookings
               </NavLink>
 
               <NavLink to="/my-payments" className={navLinkClass}>
