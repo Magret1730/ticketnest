@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../../api/authService";
 import { useAuth } from "../../context/AuthContext";
 import { Eye, EyeOff, Ticket } from "lucide-react";
-import AuthService from "../../api/authService";
 import { toast } from "react-toastify";
 
 
