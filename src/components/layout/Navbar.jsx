@@ -4,7 +4,7 @@ import { User, Ticket, Menu, X } from "lucide-react";
 import { useState } from "react";
 
 export default function Navbar() {
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, logout } = useAuth();
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
 
@@ -105,7 +105,7 @@ export default function Navbar() {
 
         {/* Right Side */}
         <div className="hidden md:flex items-center gap-3">
-          {!isAuthenticated ? (
+          { !isAuthenticated ? (
             <>
               <Link
                 to="/login"
@@ -122,13 +122,25 @@ export default function Navbar() {
               </Link>
             </>
           ) : (
-            <Link
-              to="/me"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
-            >
-              <User className="w-5 h-5" />
-              <span>Account</span>
-            </Link>
+            <>
+              <Link
+                to="/me"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
+              >
+                <User className="w-5 h-5" />
+                <span>Account</span>
+              </Link>
+              <Link
+                onClick={() => {
+                  logout();
+                  closeMobileMenu();
+                  navigate("/events");
+                }}
+                className="px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
+              >
+                Logout
+              </Link>
+            </>
           )}
         </div>
 
@@ -213,14 +225,26 @@ export default function Navbar() {
                 </Link>
               </div>
             ) : (
-              <Link
-                to="/me"
-                onClick={closeMobileMenu}
-                className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
-              >
-                <User className="w-4 h-4" />
-                <span>Account</span>
-              </Link>
+              <>
+                <Link
+                  to="/me"
+                  onClick={closeMobileMenu}
+                  className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Account</span>
+                </Link>
+                <Link
+                  onClick={() => {
+                    logout();
+                    closeMobileMenu();
+                    navigate("/events");
+                  }}
+                  className="w-full text-center px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
+                >
+                  Logout
+                </Link>
+              </>
             )}
           </div>
         </div>

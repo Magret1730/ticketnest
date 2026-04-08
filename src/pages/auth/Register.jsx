@@ -1,40 +1,58 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, Ticket } from "lucide-react";
+import { Eye, EyeOff, Ticket } from "lucide-react";
 import AuthService from "../../api/authService";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function Register() {
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
-    const result = await AuthService.register(formData);
+    try {
+      setLoading(true);
 
-    if (result.success) {
-      navigate("/login");
-    } else {
-      setError(result.message);
+      const result = await AuthService.register(formData);
+
+      if (result.success) {
+        toast.success(result.message || "Account created successfully! Please log in.");
+        navigate("/login");
+      } else {
+        toast.error(result.message || "Registration failed. Please try again.");
+        setError(result.message);
+      }
+    } catch (err) {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
-    <section className="min-h-2 bg-[#f7f7f7] px-4 py-10 sm:px-6 lg:px-8">
+    <section className="min-h-screen bg-[#f7f7f7] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-xl">
         <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm sm:p-10">
           <div className="flex flex-col items-center text-center">
@@ -49,18 +67,12 @@ export default function Register() {
               Create an account
             </h1>
 
-            <p className=" text-lg text-gray-500 sm:text-lg">
+            <p className="text-lg text-gray-500">
               Join TicketNest and start booking amazing events
             </p>
           </div>
 
-          {error && (
-            <div className="mb-4 rounded bg-red-100 p-3 text-sm text-red-600">
-              {error}
-            </div>
-          )}
-
-          <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
                 <label
@@ -128,7 +140,7 @@ export default function Register() {
               <div className="relative">
                 <input
                   id="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={formData.password}
                   onChange={handleChange}
@@ -138,9 +150,14 @@ export default function Register() {
                 />
                 <button
                   type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
                   className="absolute inset-y-0 right-4 flex items-center text-gray-500"
                 >
-                  <Eye className="h-5 w-5" />
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
 
@@ -152,9 +169,9 @@ export default function Register() {
             <button
               type="submit"
               disabled={loading}
-              className="h-10 w-full rounded-xl bg-black text-lg font-medium text-white transition hover:bg-gray-800 disabled:bg-gray-400"
+              className="h-10 w-full rounded-xl bg-black text-lg font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {loading ? "Creating..." : "Create Account"}
+              {loading ? "Creating Account..." : "Create Account"}
             </button>
           </form>
 
