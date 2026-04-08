@@ -9,7 +9,7 @@ class AuthService {
         localStorage.setItem("token", response.data.token);
       }
 
-      if (response.data?.user) { // Might need to adjust based on actual API response structure
+      if (response.data?.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
       }
 
@@ -24,6 +24,7 @@ class AuthService {
       return {
         success: false,
         message:
+          err.response?.data?.error ||
           err.response?.data?.message ||
           "Register: Internal server error",
       };
@@ -53,6 +54,7 @@ class AuthService {
       return {
         success: false,
         message:
+          err.response?.data?.error ||
           err.response?.data?.message ||
           "Login: Invalid credentials or server error",
       };

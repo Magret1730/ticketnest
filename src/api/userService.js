@@ -1,25 +1,25 @@
 import api from "./axios";
 
 class UserService {
-  static async createUser(userData) {
-    try {
-      const response = await api.post("/users", userData);
+  // static async createUser(userData) {
+  //   try {
+  //     const response = await api.post("/users", userData);
 
-      return {
-        success: true,
-        data: response.data,
-        message: "User created successfully",
-      };
-    } catch (err) {
-      console.error("Create User Error:", err);
+  //     return {
+  //       success: true,
+  //       data: response.data,
+  //       message: "User created successfully",
+  //     };
+  //   } catch (err) {
+  //     console.error("Create User Error:", err);
 
-      return {
-        success: false,
-        message:
-          err.response?.data?.message || "Create User: Internal server error",
-      };
-    }
-  }
+  //     return {
+  //       success: false,
+  //       message:
+  //         err.response?.data?.message || "Create User: Internal server error",
+  //     };
+  //   }
+  // }
 
   static async getUserById(id) {
     try {
