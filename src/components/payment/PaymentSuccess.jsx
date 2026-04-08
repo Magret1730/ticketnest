@@ -1,23 +1,58 @@
-import { Link, useParams, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Check } from "lucide-react";
-import events from "../../data/events.json";
+import BookingService from "../../api/bookingService";
 
 export default function PaymentSuccess() {
   const { bookingId } = useParams();
-  const [searchParams] = useSearchParams();
 
-  const quantity = Number(searchParams.get("quantity")) || 1;
+  const [booking, setBooking] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const event = events.find((item) => item.id === Number(bookingId));
+  useEffect(() => {
+    const fetchBooking = async () => {
+      try {
+        setLoading(true);
+        setError("");
 
-  if (!event) {
+        const result = await BookingService.getBookingById(bookingId);
+
+        if (result.success) {
+          setBooking(result.data);
+        } else {
+          setError(result.message || "Failed to load payment confirmation details.");
+        }
+      } catch (err) {
+        setError("Failed to load payment confirmation details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBooking();
+  }, [bookingId]);
+
+  if (loading) {
+    return (
+      <section className="bg-[#f7f7f7] py-10 md:py-16">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="rounded-2xl border border-gray-200 bg-white px-6 py-10 text-center shadow-sm">
+            <p className="text-gray-600">Loading confirmation...</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || !booking) {
     return (
       <section className="bg-[#f7f7f7] py-10 md:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <div className="rounded-2xl border border-gray-200 bg-white px-6 py-10 text-center shadow-sm">
             <h1 className="text-2xl font-bold text-black">Booking not found</h1>
             <p className="mt-2 text-gray-600">
-              We could not find the payment confirmation details.
+              {error || "We could not find the payment confirmation details."}
             </p>
           </div>
         </div>
@@ -25,7 +60,9 @@ export default function PaymentSuccess() {
     );
   }
 
-  const total = event.price * quantity;
+  const event = booking.event;
+  const quantity = booking.quantity;
+  const total = Number(booking.totalPrice);
 
   return (
     <section className="bg-[#f7f7f7] py-12 md:py-20">
@@ -39,7 +76,7 @@ export default function PaymentSuccess() {
         </h1>
 
         <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-gray-600 sm:text-xl">
-          Your booking for {event.title} has been confirmed.
+          Your booking for {event?.title} has been confirmed.
           <br className="hidden sm:block" />
           You will receive a confirmation email shortly.
         </p>
@@ -47,8 +84,10 @@ export default function PaymentSuccess() {
         <div className="mt-10 rounded-2xl border border-gray-200 bg-white px-6 py-6 shadow-sm sm:px-8">
           <p className="text-lg text-gray-500">Order Details</p>
           <p className="mt-2 text-2xl font-semibold text-black">
-            {quantity} {quantity > 1 ? "tickets" : "ticket"} - $
-            {total.toFixed(2)}
+            {quantity} {quantity > 1 ? "tickets" : "ticket"} - ${total.toFixed(2)}
+          </p>
+          <p className="mt-2 text-sm text-gray-500">
+            Booking No: {booking.bookingNumber}
           </p>
         </div>
 
