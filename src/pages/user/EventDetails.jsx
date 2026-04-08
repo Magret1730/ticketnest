@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import {
@@ -11,18 +11,49 @@ import {
   Minus,
   Plus,
 } from "lucide-react";
-import events from "../../data/events.json";
+import EventService from "../../api/eventService";
 
 export default function EventDetails() {
   const { id } = useParams();
+  console.log("ID:", id);
+
   const { isAuthenticated } = useAuth();
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [event, setEvent] = useState(null);
 
   const navigate = useNavigate();
 
-  const event = useMemo(() => {
-    return events.find((item) => item.id === Number(id));
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchEvent = async () => {
+      try {
+        setLoading(true);
+
+        const result = await EventService.getEventById(id);
+        console.log("Fetched event:", result);
+
+        if (result.success) {
+          setEvent(result.data);
+        } else {
+          console.error("Failed to fetch event:", result.message);
+          setEvent(null);
+        }
+      } catch (err) {
+        console.error("Error fetching event:", err);
+        setEvent(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvent();
   }, [id]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   if (!event) {
     return (
@@ -50,7 +81,7 @@ export default function EventDetails() {
   const total = event.price * quantity;
 
   const increaseQuantity = () => {
-    if (quantity < event.ticketsLeft) {
+    if (quantity < event.availableTickets) {
       setQuantity((prev) => prev + 1);
     }
   };
@@ -76,7 +107,7 @@ export default function EventDetails() {
           <div>
             <div className="overflow-hidden rounded-2xl bg-gray-200">
               <img
-                src={event.image || "/images/event-placeholder.jpg"}
+                src={event.image || "/images/placeholder.jpeg"}
                 alt={event.title}
                 className="h-[280px] w-full object-cover sm:h-[420px] lg:h-[460px]"
                 onError={(e) => {
@@ -112,16 +143,14 @@ export default function EventDetails() {
                   <div className="flex items-center gap-3">
                     <Users className="h-5 w-5 shrink-0" />
                     <span className="text-lg">
-                      {event.ticketsLeft} tickets available
+                      {event.availableTickets} tickets available
                     </span>
                   </div>
                 </div>
               </div>
 
               <div className="mt-10">
-                <h2 className="text-2xl font-bold text-black">
-                  About this event
-                </h2>
+                <h2 className="text-2xl font-bold text-black">About this event</h2>
                 <p className="mt-4 max-w-4xl text-lg leading-9 text-gray-600">
                   {event.description}
                 </p>
@@ -140,7 +169,7 @@ export default function EventDetails() {
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-base text-gray-600">Price per ticket</span>
                   <span className="text-base font-bold text-black">
-                    ${event.price.toFixed(2)}
+                    ${Number(event.price).toFixed(2)}
                   </span>
                 </div>
 
@@ -151,21 +180,17 @@ export default function EventDetails() {
                     <button
                       type="button"
                       onClick={decreaseQuantity}
-                      className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-300 text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                       disabled={quantity === 1}
                     >
                       <Minus className="h-4 w-4" />
                     </button>
 
-                    <span className="min-w-4 text-center text-base font-medium text-black">
-                      {quantity}
-                    </span>
+                    <span>{quantity}</span>
 
                     <button
                       type="button"
                       onClick={increaseQuantity}
-                      className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-300 text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
-                      disabled={quantity === event.ticketsLeft}
+                      disabled={quantity === event.availableTickets}
                     >
                       <Plus className="h-4 w-4" />
                     </button>
@@ -174,11 +199,9 @@ export default function EventDetails() {
 
                 <div className="border-t border-gray-200 pt-6">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="text-lg font-semibold text-black">
-                      Total
-                    </span>
+                    <span className="text-lg font-semibold text-black">Total</span>
                     <span className="text-xl font-bold text-black">
-                      ${total.toFixed(2)}
+                      ${Number(total).toFixed(2)}
                     </span>
                   </div>
                 </div>
@@ -191,9 +214,7 @@ export default function EventDetails() {
                       ? navigate(`/booking/${event.id}?quantity=${quantity}`)
                       : navigate("/login")
                   }
-                  // onClick={() => navigate(`/booking/${event.id}?quantity=${quantity}`)} // Did this because auth isn't ready
                 >
-
                   Book Tickets
                 </button>
               </div>

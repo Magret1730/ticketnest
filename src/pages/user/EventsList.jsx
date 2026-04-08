@@ -1,10 +1,37 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
 import EventCard from "../../components/event/EventCard";
-import events from "../../data/events.json";
+import EventService from "../../api/eventService";
 
 export default function EventsList() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async() => {
+      try {
+        setLoading(true);
+
+        const result = await EventService.getAllEvents();
+
+        if (result.success) {
+          setEvents(result.data);
+        } else {
+          console.error("Failed to fetch events:", result.message);
+          setEvents([]);
+        }
+
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const filteredEvents = useMemo(() => {
     const query = searchTerm.toLowerCase().trim();
@@ -17,7 +44,7 @@ export default function EventsList() {
         event.location.toLowerCase().includes(query)
       );
     });
-  }, [searchTerm]);
+  }, [searchTerm, events]);
 
   return (
     <section className="py-10 md:py-14">

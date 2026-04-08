@@ -9,7 +9,7 @@ export default function EventCard({ event }) {
     time,
     location,
     price,
-    ticketsLeft,
+    availableTickets,
     image,
   } = event;
 
@@ -50,7 +50,7 @@ export default function EventCard({ event }) {
       </div>
 
       <div className="flex items-center justify-between border-t border-gray-200 px-5 py-5">
-        <p className="text-sm text-gray-500">{ticketsLeft} tickets left</p>
+        <p className="text-sm text-gray-500">{availableTickets} tickets left</p>
 
         <Link
           to={`/events/${id}`}
