@@ -15,9 +15,10 @@ import EventService from "../../api/eventService";
 
 export default function EventDetails() {
   const { id } = useParams();
-  console.log("ID:", id);
+  // console.log("ID:", id);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  // console.log("User:" ,user);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(false);
   const [event, setEvent] = useState(null);
@@ -32,7 +33,7 @@ export default function EventDetails() {
         setLoading(true);
 
         const result = await EventService.getEventById(id);
-        console.log("Fetched event:", result);
+        // console.log("Fetched event:", result);
 
         if (result.success) {
           setEvent(result.data);
@@ -211,7 +212,8 @@ export default function EventDetails() {
                   className="h-12 w-full rounded-xl bg-black text-lg font-medium text-white transition hover:bg-gray-800"
                   onClick={() =>
                     isAuthenticated
-                      ? navigate(`/booking/${event.id}?quantity=${quantity}`)
+                      // ? navigate(`/bookings?userId=${user.id}&eventId=${event.id}&quantity=${quantity}`)
+                      ? navigate(`/booking/${event.id}?userId=${user.id}&quantity=${quantity}`)
                       : navigate("/login")
                   }
                 >

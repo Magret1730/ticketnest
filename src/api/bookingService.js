@@ -4,7 +4,7 @@ class BookingService {
   static async createBooking({ userId, eventId, quantity }) {
     try {
       const response = await api.post(
-        `/bookings?userId=${userId}&event=${eventId}&quantity=${quantity}`
+        `/bookings?userId=${userId}&eventId=${eventId}&quantity=${quantity}`
       );
 
       return {
