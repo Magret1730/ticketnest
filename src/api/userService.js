@@ -40,6 +40,25 @@ class UserService {
     }
   }
 
+  static async getAllUsers() {
+    try {
+      const response = await api.get("/users");
+
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (err) {
+      console.error("Get All Users Error:", err);
+
+      return {
+        success: false,
+        message:
+          err.response?.data?.message || "Get All Users: Internal server error",
+      };
+    }
+  }
+
   static async updateUser(id, userData) {
     try {
       const response = await api.put(`/users/${id}`, userData);

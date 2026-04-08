@@ -1,7 +1,38 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, Ticket } from "lucide-react";
+import AuthService from "../../api/authService";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const result = await AuthService.register(formData);
+
+    if (result.success) {
+      navigate("/login");
+    } else {
+      setError(result.message);
+    }
+    setLoading(false);
+  };
+
   return (
     <section className="min-h-2 bg-[#f7f7f7] px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-xl">
@@ -23,7 +54,13 @@ export default function Register() {
             </p>
           </div>
 
-          <form className="mt-8 space-y-4">
+          {error && (
+            <div className="mb-4 rounded bg-red-100 p-3 text-sm text-red-600">
+              {error}
+            </div>
+          )}
+
+          <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div>
                 <label
@@ -36,6 +73,9 @@ export default function Register() {
                   id="firstName"
                   type="text"
                   placeholder="John"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
                   className="h-10 w-full rounded-sm border border-gray-300 px-4 text-lg text-black outline-none transition placeholder:text-gray-400 focus:border-black"
                 />
               </div>
@@ -51,6 +91,9 @@ export default function Register() {
                   id="lastName"
                   type="text"
                   placeholder="Doe"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
                   className="h-10 w-full rounded-sm border border-gray-300 px-4 text-lg text-black outline-none transition placeholder:text-gray-400 focus:border-black"
                 />
               </div>
@@ -67,6 +110,9 @@ export default function Register() {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
                 className="h-10 w-full rounded-sm border border-gray-300 px-4 text-lg text-black outline-none transition placeholder:text-gray-400 focus:border-black"
               />
             </div>
@@ -84,6 +130,10 @@ export default function Register() {
                   id="password"
                   type="password"
                   placeholder="Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  minLength={8}
                   className="h-10 w-full rounded-xl border border-gray-300 px-4 pr-12 text-lg text-black outline-none transition placeholder:text-gray-400 focus:border-black"
                 />
                 <button
@@ -101,9 +151,10 @@ export default function Register() {
 
             <button
               type="submit"
-              className="h-10 w-full rounded-xl bg-black text-lg font-medium text-white transition hover:bg-gray-800"
+              disabled={loading}
+              className="h-10 w-full rounded-xl bg-black text-lg font-medium text-white transition hover:bg-gray-800 disabled:bg-gray-400"
             >
-              Create Account
+              {loading ? "Creating..." : "Create Account"}
             </button>
           </form>
 
