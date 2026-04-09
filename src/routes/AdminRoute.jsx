@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { ClipLoader } from "react-spinners";
 
 export default function AdminRoute() {
   const { isAuthenticated, isAdmin, loading } = useAuth();

@@ -46,7 +46,8 @@ class PaymentService {
 
   static async getPaymentById(id) {
     try {
-      const response = await api.get(`/payments/${id}`);
+      const response = await api.get(`/payments/${id}/customerName`);
+      console.log("Response: ", response);
 
       return {
         success: true,
