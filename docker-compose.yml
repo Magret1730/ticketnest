@@ -1,0 +1,39 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "3000:80"
+    network_mode: host
+
+  backend:
+    image: eclipse-temurin:21-jre
+    volumes:
+      - ../ticketnest-backend/target/ticketnest-backend-1.0.0.jar:/app/app.jar
+    working_dir: /app
+    command: java -jar app.jar
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=mysql
+    depends_on:
+      - mysql
+    network_mode: host
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: ticketnest
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    network_mode: host
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
