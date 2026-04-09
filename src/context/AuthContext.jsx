@@ -5,6 +5,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -21,13 +22,16 @@ export function AuthProvider({ children }) {
       setUser(null);
       setToken(null);
     }
+
+    setLoading(false);
   }, []);
 
-  const login = (userData, tokenData) => {
-    localStorage.setItem("user", JSON.stringify(userData));
-    localStorage.setItem("token", tokenData);
+  const login = (userData, authToken) => {
     setUser(userData);
-    setToken(tokenData);
+    setToken(authToken);
+  
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", authToken);
   };
 
   const logout = () => {
@@ -37,7 +41,8 @@ export function AuthProvider({ children }) {
     setToken(null);
   };
 
-  const isAuthenticated = !!token;
+  // const isAuthenticated = !!token;
+  const isAuthenticated = !!user && !!token;
   const isAdmin = user?.role === "ADMIN";
 
   return (
@@ -45,6 +50,7 @@ export function AuthProvider({ children }) {
       value={{
         user,
         token,
+        loading,
         login,
         logout,
         isAuthenticated,
