@@ -1,9 +1,38 @@
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import EventCard from "../event/EventCard";
-import events from "../../data/events.json";
+import EventService from "../../api/eventService";
+import { useEffect, useState } from "react";
 
 export default function FeaturedEventsSection() {
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async() => {
+      try {
+        setLoading(true);
+
+        const result = await EventService.getAllEvents();
+
+        if (result.success) {
+          setEvents(result.data);
+        } else {
+          console.error("Failed to fetch events:", result.message);
+          setEvents([]);
+        }
+
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setEvents([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
   const featuredEvents = events.slice(0, 6);
 
   return (
