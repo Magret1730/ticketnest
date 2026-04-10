@@ -21,6 +21,8 @@ class UserService {
   //   }
   // }
 
+  // getUserById method takes a user ID, makes an API call to retrieve the user details,
+  // and returns the data or an error message
   static async getUserById(id) {
     try {
       const response = await api.get(`/users/${id}`);
@@ -40,6 +42,7 @@ class UserService {
     }
   }
 
+  // getAllUsers method makes an API call to retrieve all users and returns the data or an error message
   static async getAllUsers() {
     try {
       const response = await api.get("/users");
@@ -59,6 +62,8 @@ class UserService {
     }
   }
 
+  // updateUser method takes a user ID and updated user data, makes an API call to update the user
+  // and returns the updated user data or an error message
   static async updateUser(id, userData) {
     try {
       const response = await api.put(`/users/${id}`, userData);
@@ -79,6 +84,7 @@ class UserService {
     }
   }
 
+  // deleteUser method takes a user ID, makes an API call to delete the user, and returns a success message or an error message
   static async deleteUser(id) {
     try {
       const response = await api.delete(`/users/${id}`);

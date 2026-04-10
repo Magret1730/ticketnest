@@ -225,11 +225,11 @@ export default function Navbar() {
                 </Link>
               </div>
             ) : (
-              <>
+              <div className="flex flex-col gap-3">
                 <Link
                   to="/me"
                   onClick={closeMobileMenu}
-                  className="w-full flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
+                  className="flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
                 >
                   <User className="w-4 h-4" />
                   <span>Account</span>
@@ -240,11 +240,11 @@ export default function Navbar() {
                     closeMobileMenu();
                     navigate("/events");
                   }}
-                  className="w-full text-center px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
+                  className="text-center px-5 py-2.5 rounded-xl border border-gray-300 text-black font-medium hover:bg-gray-50 transition"
                 >
                   Logout
                 </Link>
-              </>
+              </div>
             )}
           </div>
         </div>

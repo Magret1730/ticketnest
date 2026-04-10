@@ -77,8 +77,6 @@ export default function PaymentSuccess() {
 
         <p className="mx-auto mt-4 max-w-2xl text-lg leading-8 text-gray-600 sm:text-xl">
           Your booking for {event?.title} has been confirmed.
-          <br className="hidden sm:block" />
-          You will receive a confirmation email shortly.
         </p>
 
         <div className="mt-10 rounded-2xl border border-gray-200 bg-white px-6 py-6 shadow-sm sm:px-8">
