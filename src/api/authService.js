@@ -1,14 +1,19 @@
 import api from "./axios";
 
 class AuthService {
+  // Register method takes user data, makes an API call to the register endpoint,
+  // and stores the token and user info in localStorage if successful
   static async register(userData) {
     try {
+      // Make API call to register endpoint with user data
       const response = await api.post("/auth/register", userData);
 
+      // Store token and user info in localStorage if registration is successful
       if (response.data?.token) {
         localStorage.setItem("token", response.data.token);
       }
 
+      // Some APIs may return user info upon registration, so we can store it as well
       if (response.data?.user) {
         localStorage.setItem("user", JSON.stringify(response.data.user));
       }
@@ -31,6 +36,8 @@ class AuthService {
     }
   }
 
+  // Login method takes user credentials, makes an API call to the login endpoint,
+  // and stores the token and user info in localStorage if successful
   static async login(credentials) {
     try {
       const response = await api.post("/auth/login", credentials);
@@ -61,6 +68,7 @@ class AuthService {
     }
   }
 
+  // Logout simply clears the token and user info from localStorage
   static logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");

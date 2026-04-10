@@ -1,6 +1,7 @@
 import api from "./axios";
 
 class BookingService {
+  // createBooking method takes userId, eventId, and quantity, makes an API call to create a booking,
   static async createBooking({ userId, eventId, quantity }) {
     try {
       const response = await api.post(
@@ -24,6 +25,7 @@ class BookingService {
     }
   }
 
+  // getAllBookings method makes an API call to retrieve all bookings and returns the data or an error message
   static async getAllBookings() {
     try {
       const response = await api.get("/bookings");
@@ -44,6 +46,8 @@ class BookingService {
     }
   }
 
+  // getBookingById method takes a booking ID, makes an API call to retrieve the booking details,
+  // and returns the data or an error message
   static async getBookingById(id) {
     try {
       const response = await api.get(`/bookings/${id}`);
@@ -63,6 +67,8 @@ class BookingService {
     }
   }
 
+  // getBookingsByUserId method takes a user ID, makes an API call to retrieve all bookings for that user,
+  // and returns the data or an error message
   static async getBookingsByUserId(userId) {
     try {
       const response = await api.get(`/bookings/user/${userId}`);
@@ -83,6 +89,8 @@ class BookingService {
     }
   }
 
+  // deleteBooking method takes a booking ID, makes an API call to delete the booking,
+  // and returns a success message or an error message
   static async deleteBooking(id) {
     try {
       const response = await api.delete(`/bookings/${id}`);
