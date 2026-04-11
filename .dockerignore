@@ -1,0 +1,7 @@
+node_modules
+target
+.git
+postgres_data
+postgres_run
+mysql-init
+*.log
