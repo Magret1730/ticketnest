@@ -1,0 +1,70 @@
+services:
+
+  # ──────────────────────────────────────────
+  # MySQL Database
+  # ──────────────────────────────────────────
+  mysql:
+    image: mysql:8.1
+    container_name: ticketnest-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ticketnest
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - ticketnest-net
+
+  # ──────────────────────────────────────────
+  # Spring Boot Backend
+  # ──────────────────────────────────────────
+  backend:
+    build:
+      context: ../ticketnest-backend   # sibling repo — both must be cloned side by side
+      dockerfile: Dockerfile
+    container_name: ticketnest-backend
+    restart: unless-stopped
+    environment:
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+    ports:
+      - "8080:8080"                    # useful for Swagger UI: http://localhost:8080/swagger
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - ticketnest-net
+
+  # ──────────────────────────────────────────
+  # React + Vite Frontend (served by Nginx)
+  # ──────────────────────────────────────────
+  frontend:
+    build:
+      context: .                       # this repo
+      dockerfile: Dockerfile
+    container_name: ticketnest-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - ticketnest-net
+
+networks:
+  ticketnest-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
