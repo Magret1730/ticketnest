@@ -52,7 +52,7 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 032155982558.dkr.ecr.us-east-1.amazonaws.com
             mkdir -p ~/ticketnest
             cd ~/ticketnest
-            cat > docker-compose.prod.yml << 'EOF'
+            cat > docker-compose.prod.yml << 'COMPOSEFILE'
 services:
   mysql:
     image: mysql:8.1
@@ -111,8 +111,8 @@ networks:
 
 volumes:
   mysql_data:
-EOF
-            cat > nginx.conf << 'EOF'
+COMPOSEFILE
+            cat > nginx.conf << 'NGINXFILE'
 server {
     listen 80;
     server_name localhost;
@@ -133,7 +133,7 @@ server {
         add_header Cache-Control "public, immutable";
     }
 }
-EOF
+NGINXFILE
             docker compose -f docker-compose.prod.yml down 2>/dev/null || true
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
