@@ -52,23 +52,22 @@ jobs:
             aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 032155982558.dkr.ecr.us-east-1.amazonaws.com
             mkdir -p ~/ticketnest
             cd ~/ticketnest
-            cat > docker-compose.prod.yml << 'COMPOSEFILE'
-services:
+            echo 'services:
   mysql:
     image: mysql:8.1
     container_name: ticketnest-db
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: ticketnest
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: '"'"'${MYSQL_ROOT_PASSWORD}'"'"'
+      MYSQL_USER: '"'"'${DB_USERNAME}'"'"'
+      MYSQL_PASSWORD: '"'"'${DB_PASSWORD}'"'"'
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p'"'"'${MYSQL_ROOT_PASSWORD}'"'"'"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -81,9 +80,9 @@ services:
     container_name: ticketnest-backend
     restart: unless-stopped
     environment:
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      JWT_SECRET: ${JWT_SECRET}
+      DB_USERNAME: '"'"'${DB_USERNAME}'"'"'
+      DB_PASSWORD: '"'"'${DB_PASSWORD}'"'"'
+      JWT_SECRET: '"'"'${JWT_SECRET}'"'"'
     ports:
       - "8080:8080"
     depends_on:
@@ -110,30 +109,8 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_data:
-COMPOSEFILE
-            cat > nginx.conf << 'NGINXFILE'
-server {
-    listen 80;
-    server_name localhost;
-    root /usr/share/nginx/html;
-    index index.html;
-    location /api/ {
-        proxy_pass http://ticketnest-backend:8080/api/;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-    location ~* \.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
-}
-NGINXFILE
+  mysql_data:' > docker-compose.prod.yml
+            printf 'server {\n    listen 80;\n    server_name localhost;\n    root /usr/share/nginx/html;\n    index index.html;\n    location /api/ {\n        proxy_pass http://ticketnest-backend:8080/api/;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n    }\n    location / {\n        try_files $uri $uri/ /index.html;\n    }\n    location ~* \\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf)$ {\n        expires 1y;\n        add_header Cache-Control "public, immutable";\n    }\n}\n' > nginx.conf
             docker compose -f docker-compose.prod.yml down 2>/dev/null || true
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
