@@ -9,8 +9,6 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
@@ -21,8 +19,6 @@ services:
     container_name: ticketnest-backend
     restart: unless-stopped
     env_file: .env
-    ports:
-      - "8080:8080"
     depends_on:
       - mysql
     networks:
