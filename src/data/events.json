@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "title": "Summer Music Festival",
+    "date": "Tuesday, July 14, 2026",
+    "time": "6:00 PM",
+    "location": "Central Park Amphitheater",
+    "price": 75,
+    "ticketsLeft": 234,
+    "image": "/images/placeholder.jpeg",
+    "description": "Join us for an unforgettable night of live music featuring top artists from around the world. Experience the best of rock, pop, and electronic music under the stars."
+  },
+  {
+    "id": 2,
+    "title": "Tech Conference 2026",
+    "date": "Friday, August 21, 2026",
+    "time": "9:00 AM",
+    "location": "Convention Center Hall A",
+    "price": 299,
+    "ticketsLeft": 567,
+    "image": "/images/placeholder.jpeg",
+    "description": "Connect with innovators, founders, and developers at this full-day tech conference. Learn about emerging trends, AI, cloud, and the future of software development."
+  },
+  {
+    "id": 3,
+    "title": "Comedy Night Live",
+    "date": "Saturday, May 9, 2026",
+    "time": "8:00 PM",
+    "location": "Downtown Comedy Club",
+    "price": 35,
+    "ticketsLeft": 42,
+    "image": "/images/placeholder.jpeg",
+    "description": "Laugh the night away with some of the funniest stand-up comedians in the city. A perfect evening out for comedy lovers and friends."
+  },
+  {
+    "id": 4,
+    "title": "Food & Wine Expo",
+    "date": "Friday, September 12, 2026",
+    "time": "1:00 PM",
+    "location": "Riverside Expo Center",
+    "price": 60,
+    "ticketsLeft": 120,
+    "image": "/images/placeholder.jpeg",
+    "description": "Taste gourmet dishes and premium wines from top chefs and wineries. Explore a rich culinary experience in one exciting venue."
+  },
+  {
+    "id": 5,
+    "title": "Startup Pitch Summit",
+    "date": "Thursday, October 8, 2026",
+    "time": "10:30 AM",
+    "location": "Innovation Hub",
+    "price": 120,
+    "ticketsLeft": 88,
+    "image": "/images/placeholder.jpeg",
+    "description": "Watch startups pitch groundbreaking ideas to investors and industry leaders. Great for entrepreneurs, tech enthusiasts, and networking."
+  },
+  {
+    "id": 6,
+    "title": "Jazz Under the Stars",
+    "date": "Saturday, June 20, 2026",
+    "time": "7:30 PM",
+    "location": "Harborfront Stage",
+    "price": 50,
+    "ticketsLeft": 156,
+    "image": "/images/placeholder.jpeg",
+    "description": "Enjoy a magical outdoor jazz concert featuring smooth melodies and breathtaking performances. Bring your friends and soak in the atmosphere."
+  }
+]

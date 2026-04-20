@@ -1,0 +1,47 @@
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: ticketnest-db
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MYSQL_DATABASE: ticketnest
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ticketnest-net
+
+  backend:
+    image: 032155982558.dkr.ecr.us-east-1.amazonaws.com/ticketnest-backend:latest
+    container_name: ticketnest-backend
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - mysql
+    networks:
+      - ticketnest-net
+
+  frontend:
+    image: 032155982558.dkr.ecr.us-east-1.amazonaws.com/ticketnest-frontend:latest
+    container_name: ticketnest-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - backend
+    networks:
+      - ticketnest-net
+
+networks:
+  ticketnest-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
