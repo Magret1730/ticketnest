@@ -6,14 +6,14 @@ services:
   mysql:
     image: mysql:8.1
     container_name: ticketnest-db
-    restart: unless-stopped
+    # restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ticketnest
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - ${MYSQL_PORT}:3306
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
@@ -33,13 +33,13 @@ services:
       context: ../ticketnest-backend   # sibling repo — both must be cloned side by side
       dockerfile: Dockerfile
     container_name: ticketnest-backend
-    restart: unless-stopped
+    # restart: unless-stopped
     environment:
       DB_USERNAME: ${DB_USERNAME}
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "8080:8080"                    # useful for Swagger UI: http://localhost:8080/swagger
+      - "${BACKEND_PORT}:8080"                    # useful for Swagger UI: http://localhost:8080/swagger
     depends_on:
       mysql:
         condition: service_healthy
@@ -54,9 +54,9 @@ services:
       context: .                       # this repo
       dockerfile: Dockerfile
     container_name: ticketnest-frontend
-    restart: unless-stopped
+    # restart: unless-stopped
     ports:
-      - "80:80"
+      - "${FRONTEND_PORT}:80"
     depends_on:
       - backend
     networks:
